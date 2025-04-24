@@ -1,33 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>MENG 메인페이지</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin-top: 80px;
+    }
+    a {
+      display: block;
+      margin: 10px 0;
+      text-decoration: none;
+      color: darkblue;
+      font-size: 18px;
+    }
+  </style>
 </head>
-<body style="text-align: center; margin-top: 80px;">
+<body>
   <h1>🏠 MENG 학습 메인페이지</h1>
+  <p id="welcome"></p>
 
-  <p id="studentInfo">...</p>
+  <!-- ✅ 로그인 버튼 추가됨 -->
+  <a href="login.html">▶ 로그인하러 가기</a>
 
-  <a href="activity.html">▶ 활동하러 가기</a><br><br>
-  <a href="mypage.html">▶ 마이페이지</a><br><br>
-  <a href="admin.html">▶ 교사용 페이지</a><br><br>
+  <a href="activity.html">▶ 활동하러 가기</a>
+  <a href="mypage.html">▶ 마이페이지</a>
+  <a href="admin.html">▶ 교사용 관리자 페이지</a>
 
   <script>
     const school = localStorage.getItem("school");
-    const grade  = localStorage.getItem("grade");
+    const grade = localStorage.getItem("grade");
     const classNum = localStorage.getItem("class");
     const number = localStorage.getItem("number");
-    const name   = localStorage.getItem("name");
+    const name = localStorage.getItem("name");
 
-    if (!school || !grade || !classNum || !number || !name) {
-      document.getElementById("studentInfo").innerText = "로그인이 필요합니다.";
-    } else {
-      document.getElementById("studentInfo").innerText =
-        `어서오세요, ${school} ${grade}학년 ${classNum}반 ${number}번 ${name}님!`;
+    if (school && grade && classNum && number && name) {
+      document.getElementById("welcome").innerText =
+        `👋 ${school} ${grade}학년 ${classNum}반 ${number}번 ${name}님, 환영합니다!`;
     }
-
-    console.log("📦 index.html student info:", { school, grade, classNum, number, name });
   </script>
 </body>
 </html>
