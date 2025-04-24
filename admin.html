@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지</title>
+</head>
+<body style="text-align: center; margin-top: 60px;">
+  <h2>📊 관리자 페이지</h2>
+  <input id="school" placeholder="학교명">
+  <input id="grade" placeholder="학년 (선택)">
+  <input id="class" placeholder="반 (선택)">
+  <button onclick="loadData()">조회</button>
+
+  <div id="results"></div>
+
+  <script>
+    function loadData() {
+      const school = document.getElementById("school").value.trim();
+      const grade = document.getElementById("grade").value.trim();
+      const classNum = document.getElementById("class").value.trim();
+
+      const params = new URLSearchParams({
+        type: "admin",
+        school,
+        grade,
+        class: classNum
+      });
+
+      fetch(`https://script.google.com/macros/s/AKfycbz6GfUoD2miNXN1MjnqB8vjuBv-IVDJmpGr3hYYJXF5AbQeVbiP0-ulBL0ZjGSDR7qdNg/exec?${params.toString()}`)
+        .then(res => res.json())
+        .then(data => {
+          const results = document.getElementById("results");
+          results.innerHTML = "";
+
+          if (data.length === 0) {
+            results.innerHTML = "<p>해당 조건의 데이터가 없습니다.</p>";
+            return;
+          }
+
+          const grouped = {};
+          data.forEach(d => {
+            const key = `${d.grade}학년 ${d.class}반`;
+            if (!grouped[key]) grouped[key] = [];
+            grouped[key].push(d);
+          });
+
+          for (let group in grouped) {
+            const section = document.createElement("div");
+            section.innerHTML = `<h3>📘 ${group}</h3>`;
+            grouped[group].forEach(d => {
+              section.innerHTML += `
+                <div style="border:1px solid #ccc; margin:10px auto; padding:10px; width:300px;">
+                  <p><strong>${d.number}번 ${d.name}</strong></p>
+                  <p><strong>단계:</strong> ${d.stage}</p>
+                  <p><strong>제목:</strong> ${d.title}</p>
+                  <p>${d.content}</p>
+                  <p style="font-size: 0.8em; color: gray;">🕒 ${d.time}</p>
+                </div>
+              `;
+            });
+            results.appendChild(section);
+          }
+        });
+    }
+  </script>
+</body>
+</html>
