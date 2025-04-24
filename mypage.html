@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>마이페이지</title>
+</head>
+<body style="text-align: center; margin-top: 60px;">
+  <h1>📚 나의 카드 모음</h1>
+  <div id="cardList"></div>
+
+  <script>
+    const student = {
+      school: localStorage.getItem("school"),
+      grade: localStorage.getItem("grade"),
+      class: localStorage.getItem("class"),
+      number: localStorage.getItem("number"),
+      name: localStorage.getItem("name"),
+      pw: localStorage.getItem("pw")
+    };
+
+    fetch(`https://script.google.com/macros/s/AKfycbz6GfUoD2miNXN1MjnqB8vjuBv-IVDJmpGr3hYYJXF5AbQeVbiP0-ulBL0ZjGSDR7qdNg/exec?page=mypage`, {
+      method: 'POST',
+      body: JSON.stringify(student)
+    })
+    .then(res => res.json())
+    .then(cards => {
+      const list = document.getElementById("cardList");
+      if (cards.length === 0) {
+        list.innerHTML = "<p>저장된 카드가 없습니다.</p>";
+        return;
+      }
+      cards.forEach(card => {
+        const div = document.createElement("div");
+        div.style.border = "1px solid #ccc";
+        div.style.margin = "10px auto";
+        div.style.width = "300px";
+        div.style.padding = "10px";
+        div.innerHTML = `
+          <h3>${card.title}</h3>
+          <p><strong>단계:</strong> ${card.stage}</p>
+          <p>${card.content}</p>
+          <p style="color: gray; font-size: 0.8em">🕒 ${card.time}</p>
+        `;
+        list.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
