@@ -1,38 +1,62 @@
-<!-- activity.html -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>활동 페이지</title>
-</head>
-<body style="text-align: center; margin-top: 60px;">
-  <h1>🧩 활동하기</h1>
-  <input id="cardTitle" value="나의 성격"><br><br>
-  <textarea id="cardContent" placeholder="나는 창의적이고 열정적이에요!" style="width: 300px; height: 100px;"></textarea><br><br>
-  <button onclick="saveCard()">카드 저장</button>
-  <p id="result" style="color: green;"></p>
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 60px;
+      }
+      input, textarea {
+        width: 300px;
+        margin: 10px 0;
+      }
+      button {
+        padding: 8px 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>💚 활동하기</h1>
 
-  <script>
-    function saveCard() {
-      const data = {
-        school: localStorage.getItem("school"),
-        grade: localStorage.getItem("grade"),
-        class: localStorage.getItem("class"),
-        number: localStorage.getItem("number"),
-        name: localStorage.getItem("name"),
-        pw: localStorage.getItem("pw"),
-        stage: "성격",
-        title: document.getElementById("cardTitle").value,
-        content: document.getElementById("cardContent").value
-      };
+    <input type="text" id="cardTitle" placeholder="카드 제목" value="나의 성격" /><br />
+    <textarea id="cardContent" placeholder="내용을 입력하세요">재밌어요</textarea><br />
+    <button onclick="saveCard()">카드 저장</button>
+    <p id="result" style="color: green;"></p>
 
-      fetch('https://script.google.com/macros/s/'https://script.google.com/macros/s/AKfycbw0Ad76jcyF9hl1DlEOn1GhA2KPca-nYsVyzduu8tCytR2LoutO4Sr6Y-novL2ZwyVLEA/exechttps://script.google.com/macros/s/AKfycbw0Ad76jcyF9hl1DlEOn1GhA2KPca-nYsVyzduu8tCytR2LoutO4Sr6Y-novL2ZwyVLEA/exec, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      })
-      .then(res => res.text())
-      .then(msg => document.getElementById("result").innerText = msg);
-    }
-  </script>
-</body>
+    <script>
+      function saveCard() {
+        const student = {
+          school: localStorage.getItem("school"),
+          grade: localStorage.getItem("grade"),
+          classNum: localStorage.getItem("class"),
+          id: localStorage.getItem("id"),
+          name: localStorage.getItem("name"),
+          pw: localStorage.getItem("pw")
+        };
+
+        const data = {
+          school: student.school,
+          grade: student.grade,
+          classNum: student.classNum,
+          id: student.id,
+          name: student.name,
+          pw: student.pw,
+          stage: "성격",
+          title: document.getElementById("cardTitle").value,
+          content: document.getElementById("cardContent").value
+        };
+
+        console.log("🔁 저장 요청 데이터:", data);
+
+        google.script.run
+          .withSuccessHandler(function (msg) {
+            document.getElementById("result").innerText = msg;
+          })
+          .saveCardData(data);
+      }
+    </script>
+  </body>
 </html>
